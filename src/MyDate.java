@@ -156,7 +156,7 @@ public class MyDate {
                 int daysMonth = 0;
                 for (int i = 1; i < month; i++) {
                     if (isLeapYear(year) && i == 2) {
-                        daysMonth += ((28 + (i + Math.floor(i / 8)) % 2 + 2 % i + 2 * Math.floor(1 / i)) + 1);
+                        daysMonth += 29;
                     } else daysMonth += ((28 + (i + Math.floor(i / 8)) % 2 + 2 % i + 2 * Math.floor(1 / i)));
                 }
 
@@ -164,7 +164,7 @@ public class MyDate {
                 int daysNowMonth = 0;
                 for (int i = 1; i < nowMonth; i++) {
                     if (isLeapYear(nowYear) && i == 2) {
-                        daysNowMonth += ((28 + (i + Math.floor(i / 8)) % 2 + 2 % i + 2 * Math.floor(1 / i)) + 1);
+                        daysNowMonth += 29;
                     } else daysNowMonth += ((28 + (i + Math.floor(i / 8)) % 2 + 2 % i + 2 * Math.floor(1 / i)));
                 }
                 System.out.println(daysNowMonth);
@@ -179,13 +179,13 @@ public class MyDate {
                 int daysMonth = 0;
                 for (int i = month; i < 12; i++) {
                     if (isLeapYear(year) && i == 2) {
-                        daysMonth += ((28 + (i + Math.floor(i / 8)) % 2 + 2 % i + 2 * Math.floor(1 / i)) + 1);
+                        daysMonth += 29;
                     } else daysMonth += ((28 + (i + Math.floor(i / 8)) % 2 + 2 % i + 2 * Math.floor(1 / i)));
                 }
                 int daysNowMonth = 0;
                 for (int i = nowMonth; i < 12; i++) {
                     if (isLeapYear(nowYear) && i == 2) {
-                        daysNowMonth += ((28 + (i + Math.floor(i / 8)) % 2 + 2 % i + 2 * Math.floor(1 / i)) + 1);
+                        daysNowMonth += 29;
                     } else daysNowMonth += ((28 + (i + Math.floor(i / 8)) % 2 + 2 % i + 2 * Math.floor(1 / i)));
                 }
                 days = days - daysMonth - day + daysNowMonth + nowDay;
