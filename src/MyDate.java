@@ -126,9 +126,9 @@ public class MyDate implements IMyDate {
                 }
                 if (!year1 && mon) {
                     if (isLeapYear(yearStart) && monthStart == 2) {
-                        time1 += 86400 * ((28 + (monthStart + Math.floor(monthStart / 8)) % 2 + 2 % monthStart + 2 * Math.floor(1 / monthStart)) + 1);
+                        time1 += 86400 * 29;
                         if (time1 > time2) {
-                            time1 -= 86400 * ((28 + (monthStart + Math.floor(monthStart / 8)) % 2 + 2 % monthStart + 2 * Math.floor(1 / monthStart)) + 1);
+                            time1 -= 86400 * 29;
                             mon = false;
                         }
                     } else {
