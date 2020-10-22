@@ -172,8 +172,6 @@ public class MyDate implements IMyDate {
                         daysNowMonth += 29;
                     } else daysNowMonth += ((28 + (i + Math.floor(i / 8)) % 2 + 2 % i + 2 * Math.floor(1 / i)));
                 }
-                System.out.println(daysNowMonth);
-                System.out.println(daysMonth);
                 days = days - daysMonth - day + daysNowMonth + nowDay;
             } else {
                 while (yearClone != nowYear) {
