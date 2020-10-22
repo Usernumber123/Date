@@ -1,7 +1,11 @@
+import pojo.PDate;
+
 public class MyDate implements IMyDate {
     private int nowDay;
     private int nowYear;
     private int nowMonth;
+
+
     enum DayOfWeek {
         SATURDAY("Sunday"),
         SUNDAY("Wednesday"),
@@ -47,14 +51,14 @@ public class MyDate implements IMyDate {
 
     @Override
     public boolean isLeapYear(int year) {
-        return (year % 4 == 0 && ((year%100 !=0)||(year%100==0 && year%400==0)));
+        return (year % 4 == 0 && ((year % 100 != 0) || (year % 100 == 0 && year % 400 == 0)));
     }
 
     @Override
     public boolean isValidDate(int year, int month, int day) {
         if ((month >= 1 && month <= 12) && (day >= 1 && day <= 31) && year > 0) {
             if (isLeapYear(year) && month == 2) {
-                return day <= 29 ;
+                return day <= 29;
             } else if (day <= (28 + (month + Math.floor(month / 8)) % 2 + 2 % month + 2 * Math.floor(1 / month))) {
                 return true;
             } else return false;
@@ -90,57 +94,59 @@ public class MyDate implements IMyDate {
     public String toString(int year, int month, int day) {
         return DayOfWeek.values()[getDayOfWeek(year, month, day)].getTitle() + " " + day + " " + Month.values()[month - 1].getTitle() + " " + year;
     }
-public void today(){
-    long timeCounter = 0;
-    int yearStart = 1970;
-    int monthStart = 1;
-    this.nowYear = 1970;
-    this.nowMonth = 0;
-    this.nowDay = 0;
-    long nowTime = System.currentTimeMillis() / 1000;
-    boolean year1 = true;
-    boolean mon = true;
-    while (timeCounter <= nowTime) {
-        if (!isLeapYear(yearStart)) {
-            timeCounter += 31536000;//add to time one year in seconds
-            if (timeCounter > nowTime) {
-                timeCounter -= 31536000;
-                year1 = false;
-            }
-        } else {
-            timeCounter += 31622400;//add to time one leap year in seconds
-            if (timeCounter > nowTime) {
-                timeCounter -= 31622400;
-                year1 = false;
-            }
-        }
-        if (!year1 && mon) {
-            if (isLeapYear(yearStart) && monthStart == 2) {
-                timeCounter += 86400 * 29;//add to time one month in seconds
+
+    public void today() {
+        long timeCounter = 0;
+        int yearStart = 1970;
+        int monthStart = 1;
+        this.nowYear = 1970;
+        this.nowMonth = 0;
+        this.nowDay = 0;
+        long nowTime = System.currentTimeMillis() / 1000;
+        boolean year1 = true;
+        boolean mon = true;
+        while (timeCounter <= nowTime) {
+            if (!isLeapYear(yearStart)) {
+                timeCounter += 31536000;//add to time one year in seconds
                 if (timeCounter > nowTime) {
-                    timeCounter -= 86400 * 29;
-                    mon = false;
+                    timeCounter -= 31536000;
+                    year1 = false;
                 }
             } else {
-                timeCounter += 86400 * ((28 + (monthStart + Math.floor(monthStart / 8)) % 2 + 2 % monthStart + 2 * Math.floor(1 / monthStart)));
+                timeCounter += 31622400;//add to time one leap year in seconds
                 if (timeCounter > nowTime) {
-                    timeCounter -= 86400 * ((28 + (monthStart + Math.floor(monthStart / 8)) % 2 + 2 % monthStart + 2 * Math.floor(1 / monthStart)));
-                    mon = false;
+                    timeCounter -= 31622400;
+                    year1 = false;
                 }
             }
-            monthStart++;
-            nowMonth++;
-        }
-        if (!mon) {
-            timeCounter += 86400;//add to time one day in seconds
-            nowDay++;
-        }
-        if (year1) {
-            yearStart++;
-            nowYear++;
+            if (!year1 && mon) {
+                if (isLeapYear(yearStart) && monthStart == 2) {
+                    timeCounter += 86400 * 29;//add to time one month in seconds
+                    if (timeCounter > nowTime) {
+                        timeCounter -= 86400 * 29;
+                        mon = false;
+                    }
+                } else {
+                    timeCounter += 86400 * ((28 + (monthStart + Math.floor(monthStart / 8)) % 2 + 2 % monthStart + 2 * Math.floor(1 / monthStart)));
+                    if (timeCounter > nowTime) {
+                        timeCounter -= 86400 * ((28 + (monthStart + Math.floor(monthStart / 8)) % 2 + 2 % monthStart + 2 * Math.floor(1 / monthStart)));
+                        mon = false;
+                    }
+                }
+                monthStart++;
+                nowMonth++;
+            }
+            if (!mon) {
+                timeCounter += 86400;//add to time one day in seconds
+                nowDay++;
+            }
+            if (year1) {
+                yearStart++;
+                nowYear++;
+            }
         }
     }
-    }
+
     @Override
     public int countDays(int year, int month, int day) {
         if (isValidDate(year, month, day)) {
@@ -192,5 +198,19 @@ public void today(){
             return days;
         } else throw new IllegalArgumentException();
     }
+    public boolean isValidDate(PDate date){
+       return isValidDate(date.getYear(),date.getMonth(),date.getDay());
+    }
 
+    public int getDayOfWeek(PDate date){
+        return getDayOfWeek(date.getYear(),date.getMonth(),date.getDay());
+    }
+
+    public String toString(PDate date){
+        return toString(date.getYear(),date.getMonth(),date.getDay());
+    }
+
+    public int countDays(PDate date){
+        return countDays(date.getYear(),date.getMonth(),date.getDay());
+    }
 }
