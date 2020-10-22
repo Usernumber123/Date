@@ -1,30 +1,4 @@
-public class MyDate {
-
-    boolean isLeapYear(int year) {
-        if (year % 4 == 0) {
-            if (year % 100 == 0) {
-                if (year % 400 == 0) {
-                    return true;
-                } else return false;
-            } else return true;
-        } else return false;
-    }
-
-    boolean isValidDate(int year, int month, int day) {
-        if ((month >= 1 && month <= 12) && (day >= 1 && day <= 31) && year > 0) {
-            if (isLeapYear(year) && month == 2) {
-                if (day <= 29) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else if (day <= (28 + (month + Math.floor(month / 8)) % 2 + 2 % month + 2 * Math.floor(1 / month))) {
-                return true;
-            } else return false;
-        }
-        return false;
-    }
-
+public class MyDate implements IMyDate {
     enum DayOfWeek {
         SATURDAY("Sunday"),
         SUNDAY("Wednesday"),
@@ -68,7 +42,36 @@ public class MyDate {
         }
     }
 
-    int getDayOfWeek(int year, int month, int day) {
+    @Override
+    public boolean isLeapYear(int year) {
+        if (year % 4 == 0) {
+            if (year % 100 == 0) {
+                if (year % 400 == 0) {
+                    return true;
+                } else return false;
+            } else return true;
+        } else return false;
+    }
+
+    @Override
+    public boolean isValidDate(int year, int month, int day) {
+        if ((month >= 1 && month <= 12) && (day >= 1 && day <= 31) && year > 0) {
+            if (isLeapYear(year) && month == 2) {
+                if (day <= 29) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else if (day <= (28 + (month + Math.floor(month / 8)) % 2 + 2 % month + 2 * Math.floor(1 / month))) {
+                return true;
+            } else return false;
+        }
+        return false;
+    }
+
+
+    @Override
+    public int getDayOfWeek(int year, int month, int day) {
         if (isValidDate(year, month, day)) {
             int codeMonth = 0;
             if (month == 1 || month == 10) codeMonth = 1;
@@ -90,11 +93,13 @@ public class MyDate {
         } else throw new Error();
     }
 
-    String toString(int year, int month, int day) {
+    @Override
+    public String toString(int year, int month, int day) {
         return DayOfWeek.values()[getDayOfWeek(year, month, day)].getTitle() + " " + day + " " + Month.values()[month - 1].getTitle() + " " + year;
     }
 
-    int countDays(int year, int month, int day) {
+    @Override
+    public int countDays(int year, int month, int day) {
         if (isValidDate(year, month, day)) {
             long time1 = 0;
             int yearStart = 1970;

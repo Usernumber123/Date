@@ -1,11 +1,10 @@
 package pojo;
 
-public class IDate {
+public class PDate {
     private int year;
     private int month;
     private int day;
-
-    public IDate(int year, int month, int day) {
+    public PDate(int year, int month, int day) {
         this.year = year;
         this.month = month;
         this.day = day;
@@ -27,7 +26,7 @@ public class IDate {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        IDate iDate = (IDate) o;
+        PDate iDate = (PDate) o;
         return year == iDate.year &&
                 month == iDate.month &&
                 day == iDate.day;
