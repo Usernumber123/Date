@@ -1,5 +1,7 @@
 import pojo.PDate;
 
+import java.util.Date;
+
 public class MyDate implements IMyDate {
     private int nowDay;
     private int nowYear;
@@ -55,7 +57,10 @@ public class MyDate implements IMyDate {
     }
 
     @Override
-    public boolean isValidDate(int year, int month, int day) {
+    public boolean isValidDate(PDate date) {
+        int month=date.getMonth();
+        int year=date.getYear();
+        int day=date.getDay();
         if ((month >= 1 && month <= 12) && (day >= 1 && day <= 31) && year > 0) {
             if (isLeapYear(year) && month == 2) {
                 return day <= 29;
@@ -68,8 +73,11 @@ public class MyDate implements IMyDate {
 
 
     @Override
-    public int getDayOfWeek(int year, int month, int day) {
-        if (isValidDate(year, month, day)) {
+    public int getDayOfWeek(PDate date) {
+        int month=date.getMonth();
+        int year=date.getYear();
+        int day=date.getDay();
+        if (isValidDate(date)) {
             int codeMonth = 0;
             if (month == 1 || month == 10) codeMonth = 1;
             if (month == 5) codeMonth = 2;
@@ -87,12 +95,12 @@ public class MyDate implements IMyDate {
             int dayOfWeek = (day + codeMonth + codeYear) % 7;
             if (isLeapYear(year) && month <= 2) dayOfWeek -= 1;
             return dayOfWeek;
-        } else throw new IllegalArgumentException();
+        } else throw new IllegalArgumentException("Date is not correct");
     }
 
     @Override
-    public String toString(int year, int month, int day) {
-        return DayOfWeek.values()[getDayOfWeek(year, month, day)].getTitle() + " " + day + " " + Month.values()[month - 1].getTitle() + " " + year;
+    public String toString(PDate date) {
+        return DayOfWeek.values()[getDayOfWeek(date)].getTitle() + " " + date.getDay() + " " + Month.values()[date.getMonth() - 1].getTitle() + " " + date.getYear();
     }
 
     public void today() {
@@ -146,71 +154,65 @@ public class MyDate implements IMyDate {
             }
         }
     }
+    private int countYearDays(int yearClone,int nowYear){
+        int days = 0;
+        if(nowYear>yearClone){
 
+        while (yearClone != nowYear) {
+            if (isLeapYear(yearClone)) days += 366;
+            else days += 365;
+            yearClone++;
+        }
+       }
+        else   while (yearClone != nowYear) {
+            if (isLeapYear(yearClone)) days += 366;
+            else days += 365;
+            yearClone--;
+        }
+        return days;
+    }
+    private int countMonthDays(int year,int month){
+        int daysMonth = 0;
+        if (nowYear > year) {
+        for (int i = 1; i < month; i++) {
+            if (isLeapYear(year) && i == 2) {
+                daysMonth += 29;
+            } else daysMonth += ((28 + (i + Math.floor(i / 8)) % 2 + 2 % i + 2 * Math.floor(1 / i)));
+        }} else {   for (int i = month; i < 12; i++) {
+            if (isLeapYear(year) && i == 2) {
+                daysMonth += 29;
+            } else daysMonth += ((28 + (i + Math.floor(i / 8)) % 2 + 2 % i + 2 * Math.floor(1 / i)));
+        }}
+        return  daysMonth;
+    }
+private int countNowMonthDays(int year){
+    int daysNowMonth = 0;
+    if (nowYear > year) {
+
+    for (int i = 1; i < nowMonth; i++) {
+        if (isLeapYear(nowYear) && i == 2) {
+            daysNowMonth += 29;
+        } else daysNowMonth += ((28 + (i + Math.floor(i / 8)) % 2 + 2 % i + 2 * Math.floor(1 / i)));
+    }}else {
+        for (int i = nowMonth; i < 12; i++) {
+            if (isLeapYear(nowYear) && i == 2) {
+                daysNowMonth += 29;
+            } else daysNowMonth += ((28 + (i + Math.floor(i / 8)) % 2 + 2 % i + 2 * Math.floor(1 / i)));
+        }
+    }
+    return  daysNowMonth;
+}
     @Override
-    public int countDays(int year, int month, int day) {
-        if (isValidDate(year, month, day)) {
+    public int countDays(PDate date) {
+        if (isValidDate(date)) {
             today();
-            int yearClone = year;
-            int days = 0;
-            if (nowYear > year) {
-                while (yearClone != nowYear) {
-                    if (isLeapYear(yearClone)) days += 366;
-                    else days += 365;
-                    yearClone++;
-                }
-                int daysMonth = 0;
-                for (int i = 1; i < month; i++) {
-                    if (isLeapYear(year) && i == 2) {
-                        daysMonth += 29;
-                    } else daysMonth += ((28 + (i + Math.floor(i / 8)) % 2 + 2 % i + 2 * Math.floor(1 / i)));
-                }
-
-                int daysNowMonth = 0;
-                for (int i = 1; i < nowMonth; i++) {
-                    if (isLeapYear(nowYear) && i == 2) {
-                        daysNowMonth += 29;
-                    } else daysNowMonth += ((28 + (i + Math.floor(i / 8)) % 2 + 2 % i + 2 * Math.floor(1 / i)));
-                }
-                days = days - daysMonth - day + daysNowMonth + nowDay;
-            } else {
-                while (yearClone != nowYear) {
-                    if (isLeapYear(yearClone)) days += 366;
-                    else days += 365;
-                    yearClone--;
-                }
-                int daysMonth = 0;
-                for (int i = month; i < 12; i++) {
-                    if (isLeapYear(year) && i == 2) {
-                        daysMonth += 29;
-                    } else daysMonth += ((28 + (i + Math.floor(i / 8)) % 2 + 2 % i + 2 * Math.floor(1 / i)));
-                }
-                int daysNowMonth = 0;
-                for (int i = nowMonth; i < 12; i++) {
-                    if (isLeapYear(nowYear) && i == 2) {
-                        daysNowMonth += 29;
-                    } else daysNowMonth += ((28 + (i + Math.floor(i / 8)) % 2 + 2 % i + 2 * Math.floor(1 / i)));
-                }
-                days = days - daysMonth - day + daysNowMonth + nowDay;
-            }
-
-
+            int yearClone = date.getYear();
+            int days=countYearDays( yearClone, nowYear);
+            int daysMonth =countMonthDays( date.getYear(), date.getMonth());
+            int daysNowMonth =countNowMonthDays(date.getYear());
+            days = days - daysMonth - date.getDay() + daysNowMonth + nowDay;
             return days;
-        } else throw new IllegalArgumentException();
-    }
-    public boolean isValidDate(PDate date){
-       return isValidDate(date.getYear(),date.getMonth(),date.getDay());
+        } else throw new IllegalArgumentException("Date is not correct");
     }
 
-    public int getDayOfWeek(PDate date){
-        return getDayOfWeek(date.getYear(),date.getMonth(),date.getDay());
-    }
-
-    public String toString(PDate date){
-        return toString(date.getYear(),date.getMonth(),date.getDay());
-    }
-
-    public int countDays(PDate date){
-        return countDays(date.getYear(),date.getMonth(),date.getDay());
-    }
 }
